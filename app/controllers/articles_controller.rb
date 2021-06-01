@@ -1,5 +1,4 @@
 class ArticlesController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_article, only: [:show, :update, :destroy]
 
   # GET /articles
@@ -17,13 +16,12 @@ class ArticlesController < ApplicationController
   # POST /articles
   def create
     @article = Article.new(article_params)
-    if authenticate_user!
-      if @article.save
-        @article.user_id = current_user.id if current_user
-        render json: @article, status: :created, location: @article
-      else
-        render json: @article.errors, status: :unprocessable_entity
-      end
+    @article.user_id = current_user.id if current_user
+
+    if @article.save
+      render json: @article, status: :created, location: @article
+    else
+      render json: @article.errors, status: :unprocessable_entity
     end
   end
 
