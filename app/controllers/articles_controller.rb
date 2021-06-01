@@ -39,7 +39,7 @@ class ArticlesController < ApplicationController
 
   # DELETE /articles/1
   def destroy
-    if current_user == @article.user
+    if current_user.id == @article.user_id
       @article.destroy
     end
   end
